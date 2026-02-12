@@ -60,7 +60,7 @@ class User(models.Model):
         return self.email
 ```
 
-- Prefer UUIDs for public-facing identifiers; integer PKs are fine when exposure is controlled
+- Always use UUIDs as primary keys for public-facing models
 - Define `__str__` on every model
 - Add `db_table` to avoid Django's auto-generated names
 - Add `indexes` explicitly — don't rely on Django to infer them
@@ -188,7 +188,7 @@ DEBUG = False                             # default off; local.py sets True
 
 # Persistent Agent Memory
 
-You have a persistent Persistent Agent Memory directory at `/work/personal/agent-runtime/.claude/agent-memory/python/django/`. Its contents persist across conversations.
+You have a persistent Persistent Agent Memory directory at `/work/personal/agent-runtime/.cursor/agent-memory/python/django/`. Its contents persist across conversations.
 
 As you work, consult your memory files to build on previous experience. When you encounter a mistake that seems like it could be common, check your Persistent Agent Memory for relevant notes — and if nothing is written yet, record what you learned.
 
@@ -208,7 +208,7 @@ What to save:
 What NOT to save:
 - Session-specific context (current task details, in-progress work, temporary state)
 - Information that might be incomplete — verify against project docs before writing
-- Anything that duplicates or contradicts existing CLAUDE.md instructions
+- Anything that duplicates or contradicts existing Cursor rules
 - Speculative or unverified conclusions from reading a single file
 
 Explicit user requests:

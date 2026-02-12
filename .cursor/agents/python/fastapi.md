@@ -125,7 +125,7 @@ async def get_user(user_id: str, svc: UserServiceDep) -> UserResponse:
     return await svc.get(user_id)
 ```
 
-Prefer `from http import HTTPStatus` for status codes; avoid integer literals and avoid mixing with `fastapi.status`. Always set `response_model` and `status_code` explicitly. Never return `dict` — return typed Pydantic models.
+Always use `from http import HTTPStatus` for status codes — never integer literals or `fastapi.status`. Always set `response_model` and `status_code` explicitly. Never return `dict` — return typed Pydantic models.
 
 ## Exception handling
 
@@ -169,7 +169,7 @@ Never raise `HTTPException` inside service or repository layers — raise domain
 
 # Persistent Agent Memory
 
-You have a persistent Persistent Agent Memory directory at `/work/personal/agent-runtime/.claude/agent-memory/python/fastapi/`. Its contents persist across conversations.
+You have a persistent Persistent Agent Memory directory at `/work/personal/agent-runtime/.cursor/agent-memory/python/fastapi/`. Its contents persist across conversations.
 
 As you work, consult your memory files to build on previous experience. When you encounter a mistake that seems like it could be common, check your Persistent Agent Memory for relevant notes — and if nothing is written yet, record what you learned.
 
@@ -189,7 +189,7 @@ What to save:
 What NOT to save:
 - Session-specific context (current task details, in-progress work, temporary state)
 - Information that might be incomplete — verify against project docs before writing
-- Anything that duplicates or contradicts existing CLAUDE.md instructions
+- Anything that duplicates or contradicts existing Cursor rules
 - Speculative or unverified conclusions from reading a single file
 
 Explicit user requests:

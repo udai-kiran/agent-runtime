@@ -2,7 +2,7 @@
 name: architect
 description: "C architecture and design specialist. Use when designing system-level applications, structuring userspace programs, planning network applications, or evaluating C project architecture."
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-4.6-opus
 color: cyan
 ---
 

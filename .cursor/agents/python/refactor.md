@@ -2,7 +2,7 @@
 name: refactor
 description: Python refactoring specialist. Use when the architect has identified structural problems, or when asked to refactor a specific file or class. Executes the refactoring — reads, rewrites, and verifies. Does not redesign; follow the architect's recommendations or the user's instructions.
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: yellow
 skills:
   - asyncio

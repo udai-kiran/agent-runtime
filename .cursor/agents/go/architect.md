@@ -2,7 +2,7 @@
 name: architect
 description: "Go architecture and design specialist. Use when designing new packages, structuring backend services, evaluating CLI architecture, or choosing between design patterns in Go."
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-4.6-opus
 color: cyan
 ---
 

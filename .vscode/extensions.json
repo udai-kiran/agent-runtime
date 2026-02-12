@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-python.vscode-pylance",
+    "ms-python.pyright",
+    "golang.go",
+    "rust-lang.rust-analyzer",
+    "llvm-vs-code-extensions.vscode-clangd"
+  ],
+  "unwantedRecommendations": []
+}

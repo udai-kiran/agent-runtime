@@ -2,7 +2,7 @@
 name: query-optimizer
 description: "SQL query optimization specialist. Use when analyzing slow queries, examining execution plans, designing indexes, or improving query performance."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: yellow
 ---
 

@@ -2,7 +2,7 @@
 name: reviewer
 description: "Expert C code reviewer. Use proactively after writing or modifying C code, before commits, or when asked to review code quality. Checks memory safety, error handling, portability, and modern C best practices."
 tools: Read, Grep, Glob, Bash, Write, Edit
-model: sonnet
+model: composer
 color: blue
 ---
 

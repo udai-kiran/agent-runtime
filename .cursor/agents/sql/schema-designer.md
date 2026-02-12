@@ -2,7 +2,7 @@
 name: schema-designer
 description: "Database schema design specialist. Use when designing new schemas, normalizing data, planning migrations, or evaluating database structure."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: yellow
 ---
 

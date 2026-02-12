@@ -2,7 +2,7 @@
 name: reviewer
 description: "SQL code reviewer. Use when reviewing SQL queries, stored procedures, migrations, or database code for performance, security, correctness, and best practices."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: yellow
 ---
 

@@ -2,7 +2,7 @@
 name: fastapi
 description: FastAPI specialist. Use when building or reviewing FastAPI applications — routers, dependency injection, Pydantic models, lifespan, middleware, exception handlers, and async patterns. Proactively reviews FastAPI code after changes.
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: cyan
 skills:
   - asyncio
@@ -125,7 +125,7 @@ async def get_user(user_id: str, svc: UserServiceDep) -> UserResponse:
     return await svc.get(user_id)
 ```
 
-Always use `from http import HTTPStatus` for status codes — never integer literals or `fastapi.status`. Always set `response_model` and `status_code` explicitly. Never return `dict` — return typed Pydantic models.
+Prefer `from http import HTTPStatus` for status codes; avoid integer literals and avoid mixing with `fastapi.status`. Always set `response_model` and `status_code` explicitly. Never return `dict` — return typed Pydantic models.
 
 ## Exception handling
 

@@ -2,7 +2,7 @@
 name: reviewer
 description: "Expert React/TypeScript code reviewer. Use proactively after writing or modifying React components, before commits, or when asked to review code quality. Checks component design, hooks usage, performance, accessibility, and type safety."
 tools: Read, Grep, Glob, Bash, Write, Edit
-model: sonnet
+model: composer
 color: blue
 ---
 

@@ -2,7 +2,7 @@
 name: architect
 description: "React/TypeScript architecture specialist. Use when designing component hierarchies, state management architecture, performance optimization strategies, or evaluating frontend design patterns."
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-4.6-opus
 color: cyan
 ---
 

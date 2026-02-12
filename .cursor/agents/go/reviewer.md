@@ -2,7 +2,7 @@
 name: reviewer
 description: "Expert Go code reviewer. Use proactively after writing or modifying Go code, before commits, or when asked to review code quality. Checks idiomatic Go patterns, error handling, concurrency, performance, and standard library usage."
 tools: Read, Grep, Glob, Bash, Write, Edit
-model: sonnet
+model: composer
 color: blue
 ---
 

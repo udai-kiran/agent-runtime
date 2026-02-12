@@ -2,7 +2,7 @@
 name: playwright
 description: "Playwright E2E testing specialist. Use when writing end-to-end tests, browser automation, visual regression testing, implementing test patterns, or following Playwright best practices."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: green
 ---
 

@@ -2,7 +2,7 @@
 name: architect
 description: "Python architecture and design specialist. Use when designing new modules, refactoring existing code for better structure, choosing between design patterns, or evaluating SOLID compliance of a system."
 tools: Read, Grep, Glob, Bash
-model: opus
+model: claude-4.6-opus
 color: cyan
 skills:
   - database

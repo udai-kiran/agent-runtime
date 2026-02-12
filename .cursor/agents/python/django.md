@@ -2,7 +2,7 @@
 name: django
 description: Django specialist. Use when building or reviewing Django applications — models, views, DRF serializers, ORM queries, migrations, settings, and async support. Proactively reviews Django code after changes.
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: magenta
 skills:
   - typing
@@ -60,7 +60,7 @@ class User(models.Model):
         return self.email
 ```
 
-- Always use UUIDs as primary keys for public-facing models
+- Prefer UUIDs for public-facing identifiers; integer PKs are fine when exposure is controlled
 - Define `__str__` on every model
 - Add `db_table` to avoid Django's auto-generated names
 - Add `indexes` explicitly — don't rely on Django to infer them

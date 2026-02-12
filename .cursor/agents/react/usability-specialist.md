@@ -2,7 +2,7 @@
 name: usability-specialist
 description: "Frontend usability and UX specialist. Use when reviewing user interfaces, improving accessibility, designing user flows, implementing responsive design, or ensuring frontend best practices for user experience."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: pink
 ---
 

@@ -2,7 +2,7 @@
 name: system-architect
 description: "System architecture specialist. Use when designing system-wide architecture, API contracts, service boundaries, data flow, infrastructure decisions, or evaluating technology choices across the stack."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: blue
 ---
 

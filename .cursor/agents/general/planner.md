@@ -2,7 +2,7 @@
 name: planner
 description: "Feature planning and task decomposition specialist. Use when breaking down large features into implementable tasks, identifying dependencies, sequencing work, assessing risks, or coordinating across multiple languages/components."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: purple
 ---
 

@@ -2,7 +2,7 @@
 name: devops-specialist
 description: "DevOps and infrastructure specialist. Use when designing CI/CD pipelines, containerization, orchestration, infrastructure as code, monitoring/alerting, or deployment strategies."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: orange
 ---
 

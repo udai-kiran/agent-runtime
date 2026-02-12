@@ -2,7 +2,7 @@
 name: reviewer
 description: "Expert Python code reviewer. Use proactively after writing or modifying Python code, before commits, or when asked to review code quality. Checks SOLID principles, type hints, docstrings, error handling, and PEP 8."
 tools: Read, Grep, Glob, Bash, Write, Edit
-model: sonnet
+model: composer
 color: blue
 ---
 

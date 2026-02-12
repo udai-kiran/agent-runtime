@@ -2,7 +2,7 @@
 name: api-designer
 description: "API design specialist. Use when designing REST APIs, GraphQL schemas, gRPC services, API contracts, versioning strategies, authentication/authorization patterns, or rate limiting."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: cyan
 ---
 

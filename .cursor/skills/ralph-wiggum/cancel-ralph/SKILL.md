@@ -1,0 +1,27 @@
+---
+name: cancel-ralph
+description: "Cancel active Ralph Wiggum loop"
+user-invocable: true
+allowed-tools: ["Bash"]
+---
+
+# Cancel Ralph
+
+```!
+if [[ -f .cursor/ralph-loop.local.md ]]; then
+  ITERATION=$(grep '^iteration:' .cursor/ralph-loop.local.md | sed 's/iteration: *//')
+  echo "FOUND_LOOP=true"
+  echo "ITERATION=$ITERATION"
+else
+  echo "FOUND_LOOP=false"
+fi
+```
+
+Check the output above:
+
+1. **If FOUND_LOOP=false**:
+   - Say "No active Ralph loop found."
+
+2. **If FOUND_LOOP=true**:
+   - Use Bash: `rm .cursor/ralph-loop.local.md`
+   - Report: "Cancelled Ralph loop (was at iteration N)" where N is the ITERATION value from above.

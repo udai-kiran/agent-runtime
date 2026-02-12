@@ -2,7 +2,7 @@
 name: debugger
 description: "Python debugging specialist. Use when encountering errors, exceptions, test failures, or unexpected behavior. Diagnoses root cause and implements a minimal fix."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: cyan
 ---
 

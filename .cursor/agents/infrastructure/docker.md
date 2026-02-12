@@ -2,7 +2,7 @@
 name: docker
 description: "Docker containerization specialist. Use when writing Dockerfiles, docker-compose configurations, optimizing images, managing containers, implementing multi-stage builds, or following container best practices."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: blue
 ---
 
@@ -43,7 +43,7 @@ When invoked, read the relevant files before making any changes.
 FROM node:18-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Stage 2: Build
 FROM node:18-alpine AS builder

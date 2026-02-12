@@ -2,7 +2,7 @@
 name: network-specialist
 description: "C network programming specialist. Use when building network servers/clients, implementing protocols, working with sockets, or optimizing network I/O performance."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: green
 ---
 

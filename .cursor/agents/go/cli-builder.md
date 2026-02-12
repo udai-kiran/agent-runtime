@@ -2,7 +2,7 @@
 name: cli-builder
 description: "Go CLI specialist. Use when building command-line tools, designing CLI architecture, implementing commands with Cobra/flag, or working with CLI UX patterns."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: green
 ---
 

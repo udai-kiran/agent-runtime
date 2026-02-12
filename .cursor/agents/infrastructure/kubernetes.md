@@ -2,7 +2,7 @@
 name: kubernetes
 description: "Kubernetes specialist. Use when writing manifests, designing Helm charts, configuring clusters, implementing deployments, managing workloads, setting up networking, or following Kubernetes best practices."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: blue
 ---
 

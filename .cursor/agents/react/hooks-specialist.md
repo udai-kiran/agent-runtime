@@ -2,7 +2,7 @@
 name: hooks-specialist
 description: "React hooks expert. Use when building custom hooks, debugging hook-related issues, optimizing hook usage, or when dealing with complex state management and side effects."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: green
 ---
 

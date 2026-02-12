@@ -2,7 +2,7 @@
 name: test-writer
 description: "Python test writer using pytest. Use when asked to add tests, improve coverage, or write tests for new code. Writes focused, fast unit tests and integration tests with proper fixtures."
 tools: Read, Write, Edit, Grep, Glob, Bash
-model: sonnet
+model: composer
 color: green
 skills:
   - asyncio

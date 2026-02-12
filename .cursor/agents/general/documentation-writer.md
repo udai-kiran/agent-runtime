@@ -2,7 +2,7 @@
 name: documentation-writer
 description: "Technical documentation specialist. Use when writing or improving README files, API documentation, architecture guides, ADRs, runbooks, code comments, or onboarding documentation."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: green
 ---
 

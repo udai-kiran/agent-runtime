@@ -1,0 +1,6 @@
+# Local Claude Code settings (machine-specific permissions)
+*.local.json
+*.local.md
+
+# Ralph loop runtime state
+.claude/ralph-loop.local.md

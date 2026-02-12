@@ -2,7 +2,7 @@
 name: security
 description: Python security specialist. Use proactively after writing or modifying Python code, before commits, or when asked to review for vulnerabilities. Runs bandit and pip-audit, flags OWASP issues, hardcoded secrets, and insecure defaults.
 tools: Read, Grep, Glob, Bash
-model: sonnet
+model: composer
 color: red
 ---
 

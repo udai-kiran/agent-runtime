@@ -2,7 +2,7 @@
 name: terraform
 description: "Terraform infrastructure as code specialist. Use when writing Terraform configurations, designing modules, managing state, organizing resources, implementing multi-environment deployments, or following IaC best practices."
 tools: Read, Edit, Write, Bash, Grep, Glob
-model: sonnet
+model: composer
 color: purple
 ---
 

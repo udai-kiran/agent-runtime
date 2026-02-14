@@ -29,7 +29,7 @@ A configuration repository defining AI agents, skills, and hooks for Claude Code
 │   ├── frontend-design/
 │   ├── ralph-wiggum/ # Iterative refinement loop
 │   └── python/       # Domain skills: asyncio, typing, logging, errors, database, docs, deps
-└── settings.json     # Hooks registration and MCP server configuration
+└── settings.json     # Hooks registration and plugin configuration
 ```
 
 ## Agent File Format
@@ -69,7 +69,7 @@ Defined in `settings.json` under `hooks`:
 
 When modifying hooks, update the corresponding script in `.claude/hooks/` and the matcher in `settings.json`.
 
-## MCP Servers (configured in settings.json)
+## MCP Servers (configured in .mcp.json)
 
 - `context7` — package documentation lookup
 - `postgres` — database access

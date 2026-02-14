@@ -1,1 +1,57 @@
-{"enabledPlugins":{"ms-python.vscode-pylance":true,"ms-python.pyright":true,"golang.go":true,"rust-lang.rust-analyzer":true,"llvm-vs-code-extensions.vscode-clangd":true},"mcpServers":{"context7":{"command":"npx","args":["-y","@upstash/context7-mcp"],"env":{"CONTEXT7_API_KEY":"${CONTEXT7_API_KEY}"}},"postgres":{"command":"sh","args":["-c","npx -y @modelcontextprotocol/server-postgres postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT:-5432}/${DATABASE_NAME}"]},"docker":{"command":"npx","args":["-y","@modelcontextprotocol/server-docker"],"env":{"DOCKER_HOST":"unix:///var/run/docker.sock"}},"github":{"command":"npx","args":["-y","@github/mcp-server-github"],"env":{"GITHUB_TOKEN":"${GITHUB_TOKEN}"}},"playwright":{"command":"npx","args":["-y","@modelcontextprotocol/server-playwright"]},"atlassian":{"command":"npx","args":["-y","@modelcontextprotocol/server-atlassian"],"env":{"JIRA_HOST":"${JIRA_HOST}","JIRA_EMAIL":"${JIRA_EMAIL}","JIRA_API_TOKEN":"${JIRA_API_TOKEN}"}}},"hooks":{"PreToolUse":[{"matcher":"Bash","hooks":[{"type":"command","command":".cursor/hooks/pre-bash-dangerous.sh"}]}],"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","command":".cursor/hooks/post-write-python.sh"},{"type":"command","command":".cursor/hooks/post-write-pytest.sh"}]}],"SubagentStop":[{"hooks":[{"type":"command","command":".cursor/hooks/subagent-stop-pytest.sh"}]}],"Stop":[{"hooks":[{"type":"command","command":".cursor/hooks/ralph-stop-hook.sh"}]}]}}
+{
+  "enabledPlugins": {
+    "ms-python.vscode-pylance": true,
+    "ms-python.pyright": true,
+    "golang.go": true,
+    "rust-lang.rust-analyzer": true,
+    "llvm-vs-code-extensions.vscode-clangd": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".cursor/hooks/pre-bash-dangerous.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".cursor/hooks/post-write-python.sh"
+          },
+          {
+            "type": "command",
+            "command": ".cursor/hooks/post-write-pytest.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".cursor/hooks/subagent-stop-pytest.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".cursor/hooks/ralph-stop-hook.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

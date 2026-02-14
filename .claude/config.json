@@ -1,0 +1,17 @@
+{
+  "security": {
+    "require_approval_for": [
+      "bash_execution",
+      "file_deletion",
+      "network_requests",
+      "package_installation"
+    ],
+    "restricted_paths": [
+      "~/.ssh",
+      "~/.aws",
+      "/etc",
+      "*.env"
+    ],
+    "sandbox_mode": true
+  }
+}

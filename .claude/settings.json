@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/pre-bash-dangerous.sh"
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/pre-bash-dangerous.sh"
           }
         ]
       }
@@ -17,11 +17,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/post-write-python.sh"
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/post-write-python.sh"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/post-write-pytest.sh"
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/post-write-pytest.sh"
           }
         ]
       }
@@ -31,7 +31,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/subagent-stop-pytest.sh"
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/subagent-stop-pytest.sh"
           }
         ]
       }
@@ -41,7 +41,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/ralph-stop-hook.sh"
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/ralph-stop-hook.sh"
           }
         ]
       }

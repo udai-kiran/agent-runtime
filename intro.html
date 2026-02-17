@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Runtime · Intro to Agentic Coding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #f0f4fa;
+      --surface: #ffffff;
+      --surface2:#eaeef6;
+      --surface3:#dde4f0;
+      --border:  #ccd5e8;
+      --border2: #b4c2d8;
+      --text:    #354858;
+      --text-hi: #0e1c2c;
+      --text-lo: #7890a4;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, #b8c8dc 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.35;
+      pointer-events: none; z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(210,220,235,0.55) 100%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    #header {
+      height: 46px;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      background: rgba(240,244,250,0.92);
+      backdrop-filter: blur(12px);
+      position: relative; z-index: 2;
+    }
+
+    .logo { display: flex; align-items: center; gap: 10px; }
+
+    .logo-mark {
+      width: 24px; height: 24px;
+      border: 1.5px solid var(--c-accent, #5520e8);
+      border-radius: 5px;
+      display: grid; place-items: center;
+      font-size: 12px;
+      color: var(--c-accent, #5520e8);
+      font-weight: 700;
+      animation: logo-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes logo-pulse {
+      0%,100% { box-shadow: 0 0 10px rgba(85,32,232,0.2); }
+      50%      { box-shadow: 0 0 18px rgba(85,32,232,0.4); }
+    }
+
+    .logo-text { font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; color: var(--text); line-height:1; }
+    .logo-text strong { color: var(--text-hi); font-weight: 700; }
+    .logo-text .sep { color: var(--text-lo); margin: 0 5px; }
+    .logo-text .sub { color: var(--text); font-weight: 500; }
+
+    #slide-counter {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--text-lo);
+    }
+
+    #slide-counter span { color: var(--text-hi); }
+
+    #hints {
+      display: flex; align-items: center; gap: 18px;
+      font-size: 10px; color: var(--text); letter-spacing: 0.06em;
+    }
+
+    .hint { display: flex; align-items: center; gap: 4px; }
+
+    kbd {
+      background: var(--surface3);
+      border: 1px solid var(--border2);
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-size: 9.5px; font-family: inherit;
+      color: var(--text-hi); font-weight: 600;
+    }
+
+    /* ── SLIDE WRAP ── */
+    #slide-wrap {
+      flex: 1; position: relative; overflow: hidden; z-index: 1;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: grid;
+      grid-template-columns: 40% 60%;
+      padding: 20px 24px;
+      gap: 20px;
+      opacity: 0;
+      transform: translateX(50px);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1; transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .slide.exit-left {
+      opacity: 0; transform: translateX(-50px);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ── LEFT PANEL ── */
+    .slide-left {
+      display: flex; flex-direction: column; gap: 14px;
+      padding-right: 4px;
+    }
+
+    .slide-num {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--sc); opacity: 0.75;
+    }
+
+    .slide-title {
+      font-size: 24px; font-weight: 800;
+      color: var(--text-hi); line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .slide-title .accent { color: var(--sc); }
+
+    .slide-tagline {
+      font-size: 11px; font-weight: 500;
+      font-style: italic; color: var(--text);
+      line-height: 1.65;
+      border-left: 2px solid var(--sc);
+      padding-left: 10px;
+    }
+
+    .slide-points {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 7px;
+      margin-top: 2px;
+    }
+
+    .slide-points li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 10.5px; line-height: 1.6; color: var(--text);
+    }
+
+    .pt-icon {
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      border-radius: 3px;
+      background: color-mix(in srgb, var(--sc) 12%, transparent);
+      border: 1px solid color-mix(in srgb, var(--sc) 30%, transparent);
+      display: grid; place-items: center;
+      font-size: 9px; color: var(--sc); margin-top: 1px;
+    }
+
+    .pt-text strong { color: var(--text-hi); font-weight: 700; }
+
+    /* ── RIGHT PANEL ── */
+    .slide-right {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+
+    .slide-right::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 30%, color-mix(in srgb, var(--sc) 6%, transparent), transparent 65%);
+      pointer-events: none;
+    }
+
+    .slide-right::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--sc);
+      box-shadow: 0 0 8px var(--sc);
+    }
+
+    /* ── BOTTOM NAV ── */
+    #bottom-nav {
+      height: 48px; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border);
+      background: rgba(240,244,250,0.92);
+      backdrop-filter: blur(12px);
+      flex-shrink: 0; position: relative; z-index: 2;
+    }
+
+    .nav-btn {
+      background: var(--surface3);
+      border: 1px solid var(--border2);
+      color: var(--text-hi);
+      padding: 5px 14px;
+      border-radius: 5px;
+      font-size: 11px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+      transition: all 0.15s; letter-spacing: 0.04em;
+    }
+
+    .nav-btn:hover:not(:disabled) { background: var(--border2); }
+    .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+
+    #dots {
+      display: flex; align-items: center; gap: 7px;
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border2);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .dot.active {
+      width: 22px; border-radius: 3px;
+      background: var(--sc, #5520e8);
+      box-shadow: 0 0 6px var(--sc, #5520e8);
+    }
+
+    /* ════════════════════════════════
+       DIAGRAM SHARED COMPONENTS
+    ════════════════════════════════ */
+
+    .d-wrap {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      position: relative; z-index: 1;
+    }
+
+    .d-box {
+      border: 1px solid var(--border2);
+      border-left: 2px solid var(--sc);
+      border-radius: 5px;
+      background: var(--surface2);
+      padding: 7px 12px;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--text-hi);
+    }
+
+    .d-box.hi {
+      border-color: var(--sc);
+      background: color-mix(in srgb, var(--sc) 9%, var(--surface));
+      color: var(--sc);
+    }
+
+    .d-box.ghost {
+      border-style: dashed;
+      background: transparent;
+      opacity: 0.55;
+    }
+
+    .d-label {
+      font-size: 8px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-lo);
+    }
+
+    .d-badge {
+      font-size: 8.5px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border: 1px solid color-mix(in srgb, var(--sc) 40%, var(--border));
+      border-radius: 3px;
+      background: color-mix(in srgb, var(--sc) 10%, var(--surface2));
+      color: var(--sc);
+      padding: 2px 7px;
+    }
+
+    .d-arrow { font-size: 14px; color: var(--sc); opacity: 0.7; line-height: 1; }
+    .d-arrow-sm { font-size: 11px; color: var(--sc); opacity: 0.6; }
+
+    .d-pulse {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--sc);
+      animation: d-pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes d-pulse {
+      0%,100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 var(--sc); }
+      50%      { transform: scale(1.4); opacity: 0.6; box-shadow: 0 0 0 4px color-mix(in srgb, var(--sc) 20%, transparent); }
+    }
+
+    /* animated wire */
+    .d-wire {
+      position: relative; overflow: hidden;
+      background: color-mix(in srgb, var(--sc) 20%, var(--border));
+    }
+
+    .d-wire-h { height: 1px; width: 32px; }
+    .d-wire-v { width: 1px; height: 28px; }
+
+    .d-wire::after {
+      content: '';
+      position: absolute; top: 0; left: -50%; height: 100%; width: 40%;
+      background: var(--sc);
+      animation: wire-h 1.6s ease-in-out infinite;
+    }
+
+    .d-wire-v::after {
+      width: 100%; height: 40%; left: 0; top: -50%;
+      animation: wire-v 1.6s ease-in-out infinite;
+    }
+
+    @keyframes wire-h {
+      0%   { left: -50%; opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { left: 110%; opacity: 0; }
+    }
+
+    @keyframes wire-v {
+      0%   { top: -50%; opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { top: 110%; opacity: 0; }
+    }
+
+    /* ════════════════════════════════
+       SLIDE 01 — Agentic Loop
+    ════════════════════════════════ */
+    .loop-diag {
+      width: 280px; height: 240px;
+      position: relative;
+    }
+
+    .loop-node {
+      position: absolute;
+      padding: 6px 10px;
+      border: 1px solid var(--border2);
+      border-left: 2px solid var(--sc);
+      border-radius: 5px;
+      background: var(--surface2);
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-hi);
+      white-space: nowrap;
+    }
+
+    .loop-node.hi {
+      border-color: var(--sc);
+      background: color-mix(in srgb, var(--sc) 10%, var(--surface));
+      color: var(--sc);
+    }
+
+    /* positions */
+    .ln-think     { top: 10px;  left: 50%; transform: translateX(-50%); }
+    .ln-act       { top: 50%;   right: 0;  transform: translateY(-50%); }
+    .ln-observe   { bottom: 10px; left: 50%; transform: translateX(-50%); }
+    .ln-think2    { top: 50%;   left: 0;   transform: translateY(-50%); }
+
+    .loop-complete {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 11px; font-weight: 700;
+      color: var(--sc);
+      letter-spacing: 0.06em;
+      animation: loop-done 4s ease-in-out infinite;
+      opacity: 0;
+      text-align: center;
+    }
+
+    @keyframes loop-done {
+      0%,65%  { opacity: 0; transform: translate(-50%,-50%) scale(0.85); }
+      78%,88% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+      100%    { opacity: 0; transform: translate(-50%,-50%) scale(1.05); }
+    }
+
+    /* traveling dot on loop path */
+    .loop-dot {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--sc);
+      box-shadow: 0 0 8px var(--sc);
+      animation: loop-travel 4s linear infinite;
+      top: 20px; left: calc(50% - 4px);
+    }
+
+    @keyframes loop-travel {
+      0%   { top: 22px;  left: calc(50% - 4px); }
+      25%  { top: calc(50% - 4px); left: calc(100% - 50px); }
+      50%  { top: calc(100% - 30px); left: calc(50% - 4px); }
+      75%  { top: calc(50% - 4px); left: 8px; }
+      100% { top: 22px;  left: calc(50% - 4px); }
+    }
+
+    /* loop path lines */
+    .loop-track {
+      position: absolute; inset: 0;
+    }
+
+    .loop-track::before, .loop-track::after {
+      content: '';
+      position: absolute;
+      background: color-mix(in srgb, var(--sc) 25%, var(--border));
+    }
+
+    /* ════════════════════════════════
+       SLIDE 02 — Tool Calling
+    ════════════════════════════════ */
+    .tool-flow {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+      width: 100%; max-width: 320px;
+    }
+
+    .tool-badges {
+      display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; justify-content: center;
+    }
+
+    .tool-return {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; justify-content: center; margin-top: 2px;
+    }
+
+    .return-line {
+      flex: 1; height: 1px; max-width: 60px;
+      background: color-mix(in srgb, var(--sc) 30%, var(--border));
+      position: relative; overflow: hidden;
+    }
+
+    .return-line::after {
+      content: '';
+      position: absolute; top: 0; left: -50%; height: 100%; width: 40%;
+      background: var(--sc);
+      animation: wire-h 2.2s ease-in-out infinite 1.1s;
+    }
+
+    /* ════════════════════════════════
+       SLIDE 03 — Agent
+    ════════════════════════════════ */
+    .agent-recipe {
+      display: flex; flex-direction: column;
+      align-items: flex-start; gap: 4px;
+    }
+
+    .agent-plus {
+      font-size: 14px; font-weight: 700;
+      color: var(--sc); padding-left: 16px; opacity: 0.6;
+    }
+
+    .agent-result {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 4px; width: 100%;
+    }
+
+    .agent-box {
+      flex: 1;
+      border: 1.5px solid var(--sc);
+      border-radius: 7px;
+      background: color-mix(in srgb, var(--sc) 7%, var(--surface));
+      padding: 12px 14px;
+      position: relative;
+      animation: agent-glow 2.5s ease-in-out infinite;
+    }
+
+    @keyframes agent-glow {
+      0%,100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--sc) 20%, transparent); }
+      50%      { box-shadow: 0 0 16px 2px color-mix(in srgb, var(--sc) 25%, transparent); }
+    }
+
+    .agent-box-label {
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--sc); opacity: 0.7; margin-bottom: 3px;
+    }
+
+    .agent-box-name {
+      font-size: 13px; font-weight: 800;
+      color: var(--sc); letter-spacing: 0.04em;
+    }
+
+    /* ════════════════════════════════
+       SLIDE 04 — Hooks
+    ════════════════════════════════ */
+    .hooks-diag {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 5px;
+      width: 100%; max-width: 360px;
+    }
+
+    .hooks-fork {
+      display: flex; gap: 20px; align-items: flex-start;
+      width: 100%; justify-content: center;
+    }
+
+    .fork-path {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 5px;
+    }
+
+    .fork-label {
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.12em;
+      padding: 3px 8px;
+      border-radius: 3px;
+    }
+
+    .fork-ok   { color: #00945a; background: rgba(0,148,90,0.1); border: 1px solid rgba(0,148,90,0.3); }
+    .fork-stop { color: #d41845; background: rgba(212,24,69,0.1); border: 1px solid rgba(212,24,69,0.3); }
+
+    /* ════════════════════════════════
+       SLIDE 05 — Ralph Loop
+    ════════════════════════════════ */
+    .ralph-diag {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 14px;
+      width: 100%; max-width: 320px;
+    }
+
+    .ralph-passes {
+      display: flex; gap: 12px; align-items: flex-end;
+    }
+
+    .ralph-pass {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 5px;
+    }
+
+    .ralph-bar-wrap {
+      width: 48px; height: 90px;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      background: var(--surface3);
+      overflow: hidden;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+
+    .ralph-bar {
+      background: var(--sc);
+      border-radius: 3px 3px 0 0;
+      transition: height 0.5s ease;
+      animation: bar-grow 4s ease-in-out infinite;
+    }
+
+    .rb-1 { animation-delay: 0s;    animation-name: bar-1; }
+    .rb-2 { animation-delay: 0.2s;  animation-name: bar-2; }
+    .rb-3 { animation-delay: 0.4s;  animation-name: bar-3; }
+
+    @keyframes bar-1 { 0%,100% { height: 25%; } 50% { height: 32%; } }
+    @keyframes bar-2 { 0%,100% { height: 62%; } 50% { height: 68%; } }
+    @keyframes bar-3 { 0%,100% { height: 92%; } 50% { height: 96%; } }
+
+    .ralph-score {
+      font-size: 10px; font-weight: 700; color: var(--sc);
+    }
+
+    .ralph-pass-label {
+      font-size: 8px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-lo);
+    }
+
+    .ralph-check {
+      font-size: 22px;
+      color: var(--sc);
+      animation: check-appear 4s ease-in-out infinite;
+    }
+
+    @keyframes check-appear {
+      0%,80% { opacity: 0; transform: scale(0.6); }
+      90%,100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ════════════════════════════════
+       SLIDE 06 — Skills
+    ════════════════════════════════ */
+    .skill-diag {
+      display: flex; align-items: center;
+      gap: 14px; width: 100%; max-width: 380px;
+    }
+
+    .skill-file {
+      flex-shrink: 0;
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      background: var(--surface2);
+      padding: 10px 12px;
+      font-size: 9px; font-weight: 600;
+      line-height: 1.7;
+      color: var(--text);
+      font-style: normal;
+    }
+
+    .skill-file .ky { color: var(--sc); }
+    .skill-file .kv { color: var(--text-hi); }
+
+    .skill-load {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 3px;
+    }
+
+    .skill-load-label {
+      font-size: 7.5px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-lo);
+    }
+
+    .skill-shimmer {
+      width: 32px; height: 2px;
+      border-radius: 1px;
+      background: var(--border);
+      position: relative; overflow: hidden;
+    }
+
+    .skill-shimmer::after {
+      content: '';
+      position: absolute; top: 0; left: -50%; height: 100%; width: 40%;
+      background: var(--sc);
+      animation: wire-h 1.4s ease-in-out infinite;
+    }
+
+    .skill-ctx {
+      flex: 1;
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--sc) 6%, var(--surface));
+      border-left: 2px solid var(--sc);
+      padding: 10px 12px;
+      font-size: 9px; font-weight: 700;
+      color: var(--sc); letter-spacing: 0.06em;
+    }
+
+    .skill-ctx-row {
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 5px; font-size: 8.5px;
+      color: var(--text); font-weight: 600;
+    }
+
+    .skill-ctx-row:last-child { margin-bottom: 0; }
+
+    /* ════════════════════════════════
+       SLIDE 07 — Context
+    ════════════════════════════════ */
+    .ctx-diag {
+      display: flex; gap: 14px;
+      align-items: flex-end; width: 100%; max-width: 360px;
+    }
+
+    .ctx-stack {
+      flex: 1;
+      display: flex; flex-direction: column-reverse;
+      gap: 4px;
+    }
+
+    .ctx-layer {
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      background: var(--surface2);
+      border-left: 2px solid var(--sc);
+      padding: 5px 9px;
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .ctx-layer.active {
+      border-color: var(--sc);
+      background: color-mix(in srgb, var(--sc) 9%, var(--surface));
+      color: var(--sc);
+    }
+
+    .ctx-layer-size {
+      font-size: 7.5px; opacity: 0.6; font-weight: 600;
+    }
+
+    .ctx-budget {
+      width: 20px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
+    }
+
+    .ctx-budget-bar {
+      flex: 1;
+      width: 100%;
+      border: 1px solid var(--border2);
+      border-radius: 3px;
+      background: var(--surface3);
+      overflow: hidden;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      min-height: 140px;
+    }
+
+    .ctx-fill {
+      background: color-mix(in srgb, var(--sc) 60%, transparent);
+      border-radius: 2px 2px 0 0;
+      height: 68%;
+      animation: ctx-fill-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes ctx-fill-pulse {
+      0%,100% { height: 68%; }
+      50%      { height: 72%; }
+    }
+
+    .ctx-budget-label {
+      font-size: 7px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-lo); text-align: center;
+      writing-mode: vertical-rl; transform: rotate(180deg);
+      white-space: nowrap;
+    }
+
+    /* ════════════════════════════════
+       SLIDE 08 — Sub Agent
+    ════════════════════════════════ */
+    .sub-diag {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      width: 100%; max-width: 340px;
+    }
+
+    .sub-agents {
+      display: flex; gap: 10px;
+      align-items: flex-start;
+    }
+
+    .sub-agent {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
+    }
+
+    .sub-box {
+      border: 1px solid var(--border2);
+      border-left: 2px solid var(--sc);
+      border-radius: 5px;
+      background: var(--surface2);
+      padding: 6px 8px;
+      font-size: 8.5px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-hi);
+      text-align: center;
+      position: relative;
+    }
+
+    .sub-box::after {
+      content: '';
+      position: absolute;
+      top: -1px; right: -1px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--sc);
+      animation: d-pulse 2s ease-in-out infinite;
+    }
+
+    .sub-agent:nth-child(2) .sub-box::after { animation-delay: 0.5s; }
+    .sub-agent:nth-child(3) .sub-box::after { animation-delay: 1s; }
+
+    .parallel-bracket {
+      font-size: 9px; font-weight: 700;
+      color: var(--text-lo); letter-spacing: 0.12em;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 2px 7px;
+      background: var(--surface3);
+    }
+
+    /* ════════════════════════════════
+       SLIDE 09 — MCP
+    ════════════════════════════════ */
+    .mcp-diag {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 10px;
+      width: 100%; max-width: 360px;
+    }
+
+    .mcp-center {
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .mcp-servers {
+      display: flex; gap: 7px; flex-wrap: wrap; justify-content: center;
+      max-width: 320px;
+    }
+
+    .mcp-server {
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      background: var(--surface2);
+      padding: 5px 9px;
+      font-size: 8.5px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text);
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    .mcp-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--sc);
+      animation: d-pulse 2.5s ease-in-out infinite;
+    }
+
+    .mcp-server:nth-child(2) .mcp-dot { animation-delay: 0.4s; }
+    .mcp-server:nth-child(3) .mcp-dot { animation-delay: 0.8s; }
+    .mcp-server:nth-child(4) .mcp-dot { animation-delay: 1.2s; }
+    .mcp-server:nth-child(5) .mcp-dot { animation-delay: 1.6s; }
+
+    .mcp-protocol {
+      border: 1px dashed var(--border2);
+      border-radius: 5px;
+      background: color-mix(in srgb, var(--sc) 5%, var(--surface));
+      padding: 7px 12px;
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--sc);
+    }
+
+    /* ════════════════════════════════
+       SLIDE 10 — Semantic Search
+    ════════════════════════════════ */
+    .sem-diag {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      width: 100%; max-width: 360px;
+    }
+
+    .vec-bars {
+      display: flex; gap: 2px; align-items: flex-end;
+      height: 32px;
+    }
+
+    .vec-bar {
+      width: 6px;
+      border-radius: 2px 2px 0 0;
+      animation: vec-wiggle 2s ease-in-out infinite;
+    }
+
+    .vec-bar:nth-child(even) { animation-direction: alternate-reverse; }
+
+    @keyframes vec-wiggle {
+      0%,100% { opacity: 0.9; }
+      50%      { opacity: 0.5; transform: scaleY(0.85); }
+    }
+
+    .sem-results {
+      display: flex; flex-direction: column; gap: 5px;
+      width: 100%;
+    }
+
+    .sem-result {
+      display: flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--surface2);
+      padding: 5px 9px;
+      font-size: 9px; font-weight: 600; color: var(--text);
+    }
+
+    .sem-score {
+      font-size: 9px; font-weight: 800;
+      color: var(--sc); margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .sem-score-bar {
+      height: 3px; border-radius: 2px;
+      background: color-mix(in srgb, var(--sc) 40%, var(--border));
+      animation: sem-bar 3s ease-in-out infinite;
+    }
+
+    @keyframes sem-bar {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.7; }
+    }
+
+    /* ════════════════════════════════
+       SLIDE 11 — LSP
+    ════════════════════════════════ */
+    .lsp-diag {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 10px;
+      width: 100%; max-width: 360px;
+    }
+
+    .lsp-flow {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; justify-content: center;
+    }
+
+    .lsp-responses {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px; width: 100%;
+    }
+
+    .lsp-resp {
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      background: var(--surface2);
+      padding: 5px 8px;
+      font-size: 8.5px; font-weight: 700;
+      letter-spacing: 0.06em; color: var(--text);
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    .lsp-resp .r-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--sc);
+      flex-shrink: 0;
+      animation: d-pulse 2s ease-in-out infinite;
+    }
+
+    .lsp-resp .r-err { background: #d41845; }
+
+    .lsp-resp:nth-child(2) .r-dot { animation-delay: 0.4s; }
+    .lsp-resp:nth-child(3) .r-dot { animation-delay: 0.8s; }
+    .lsp-resp:nth-child(4) .r-dot { animation-delay: 1.2s; }
+
+    .lsp-rpc {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 2px;
+    }
+
+    .lsp-rpc-label {
+      font-size: 7.5px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-lo);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div id="header">
+  <div class="logo">
+    <div class="logo-mark">◈</div>
+    <div class="logo-text">
+      <strong>agent</strong>runtime
+      <span class="sep">·</span>
+      <span class="sub">intro to agentic coding</span>
+    </div>
+  </div>
+  <div id="slide-counter"><span id="cur-num">01</span> / 11</div>
+  <div id="hints">
+    <div class="hint"><kbd>←</kbd><kbd>→</kbd> navigate</div>
+    <div class="hint"><kbd>esc</kbd> reset</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDES ══════════ -->
+<div id="slide-wrap"></div>
+
+<!-- ══════════ BOTTOM NAV ══════════ -->
+<div id="bottom-nav">
+  <button class="nav-btn" id="btn-prev">← prev</button>
+  <div id="dots"></div>
+  <button class="nav-btn" id="btn-next">next →</button>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// SLIDE DATA
+// ══════════════════════════════════════════════
+
+const SLIDES = [
+  {
+    n: '01', color: '#5520e8',
+    title: ['Agentic', ' Coding'],
+    accentIdx: 0,
+    tagline: 'The AI doesn\'t just answer — it acts, observes, and loops until the job is done.',
+    points: [
+      ['▸', '<strong>Traditional AI:</strong> one prompt → one response, done.'],
+      ['⟳', '<strong>Agentic AI:</strong> the model decides what to do next, calls tools, reads results, continues.'],
+      ['∞', 'The loop runs autonomously until a goal is reached or confidence is high.'],
+      ['⚡', 'This enables AI to handle real multi-step engineering tasks.'],
+    ],
+    diag: `
+<div class="d-wrap" style="justify-content:center;align-items:center;">
+  <div class="loop-diag">
+    <!-- SVG-free loop path using bordered divs -->
+    <div style="position:absolute;top:0;left:0;right:0;bottom:0;">
+      <!-- top edge -->
+      <div style="position:absolute;top:28px;left:90px;right:90px;height:1px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+      <!-- right edge -->
+      <div style="position:absolute;top:34px;right:38px;bottom:34px;width:1px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+      <!-- bottom edge -->
+      <div style="position:absolute;bottom:28px;left:90px;right:90px;height:1px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+      <!-- left edge -->
+      <div style="position:absolute;top:34px;left:38px;bottom:34px;width:1px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+    </div>
+
+    <div class="loop-node hi ln-think">THINK</div>
+    <div class="loop-node ln-act" style="font-size:8px;">CALL TOOL</div>
+    <div class="loop-node ln-observe">OBSERVE</div>
+    <div class="loop-node ln-think2" style="font-size:8px;">PLAN</div>
+
+    <div class="loop-complete">task complete ✓</div>
+    <div class="loop-dot"></div>
+  </div>
+</div>`
+  },
+  {
+    n: '02', color: '#00945a',
+    title: ['Tool', ' Calling'],
+    accentIdx: 0,
+    tagline: 'The LLM\'s hands. Tools are how the model interacts with the real world.',
+    points: [
+      ['{}', '<strong>tool_use block:</strong> structured JSON output specifying which tool and what arguments.'],
+      ['↩', 'The runtime executes the tool and returns a <strong>tool_result</strong> message.'],
+      ['⚒', 'Tools: Read, Write, Bash, Grep, Glob, WebFetch, custom MCP tools.'],
+      ['∞', 'Model can call many tools per turn; results feed back into context.'],
+    ],
+    diag: `
+<div class="d-wrap" style="flex-direction:column;gap:0;">
+  <div class="tool-flow">
+    <div class="d-box hi" style="align-self:center;min-width:80px;text-align:center;">LLM</div>
+    <div class="d-wire d-wire-v" style="height:18px;"></div>
+    <div class="d-box" style="font-size:8.5px;letter-spacing:0.06em;border-style:dashed;">
+      <span style="color:var(--sc);">tool_use</span> { name, input }
+    </div>
+    <div class="d-wire d-wire-v" style="height:18px;"></div>
+    <div class="d-box hi" style="align-self:center;min-width:80px;text-align:center;">executor</div>
+    <div class="tool-badges">
+      <span class="d-badge">Read</span>
+      <span class="d-badge">Write</span>
+      <span class="d-badge">Bash</span>
+      <span class="d-badge">Search</span>
+    </div>
+    <div class="d-wire d-wire-v" style="height:18px;"></div>
+    <div class="d-box" style="font-size:8.5px;letter-spacing:0.06em;border-style:dashed;">
+      <span style="color:var(--sc);">tool_result</span> { content }
+    </div>
+    <div class="tool-return">
+      <div class="return-line"></div>
+      <div style="font-size:9px;color:var(--text-lo);">→ back to LLM</div>
+      <div class="return-line"></div>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    n: '03', color: '#0088bb',
+    title: ['An', ' Agent'],
+    accentIdx: 1,
+    tagline: 'A specialist with a role, a toolbelt, and a model powering its reasoning.',
+    points: [
+      ['=', '<strong>Agent</strong> = system prompt + allowed tools + a model.'],
+      ['⬡', 'Defined in YAML frontmatter: <strong>name, description, tools, model</strong>.'],
+      ['⊕', 'The <strong>description</strong> field is what the orchestrator uses to invoke it.'],
+      ['◎', 'Domain-specific: python debugger, SQL reviewer, k8s specialist, etc.'],
+    ],
+    diag: `
+<div class="d-wrap" style="flex-direction:column;gap:8px;">
+  <div class="agent-recipe">
+    <div class="d-box" style="width:200px;">
+      <div class="d-label">ingredient</div>
+      <div style="margin-top:2px;">system prompt (role)</div>
+    </div>
+    <div class="agent-plus">+</div>
+    <div class="d-box" style="width:200px;">
+      <div class="d-label">ingredient</div>
+      <div style="margin-top:2px;">tools: [Read, Edit, Bash]</div>
+    </div>
+    <div class="agent-plus">+</div>
+    <div class="d-box" style="width:200px;">
+      <div class="d-label">ingredient</div>
+      <div style="margin-top:2px;">model: sonnet</div>
+    </div>
+  </div>
+  <div class="agent-result">
+    <div class="d-wire d-wire-h" style="width:24px;"></div>
+    <div style="font-size:18px;color:var(--sc);opacity:0.6;">→</div>
+    <div class="agent-box">
+      <div class="agent-box-label">agent</div>
+      <div class="agent-box-name">python·debugger</div>
+      <div style="margin-top:5px;display:flex;align-items:center;gap:4px;">
+        <div class="d-pulse" style="width:6px;height:6px;"></div>
+        <span style="font-size:8.5px;color:var(--text);letter-spacing:0.06em;">running</span>
+      </div>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    n: '04', color: '#d41845',
+    title: ['Hooks'],
+    accentIdx: 0,
+    tagline: 'Shell scripts that fire on events — intercept, audit, and automate at every step.',
+    points: [
+      ['⬕', '<strong>PreToolUse:</strong> runs before a tool executes. Can block dangerous commands.'],
+      ['↩', '<strong>PostToolUse:</strong> runs after a file write. Can auto-lint or run tests.'],
+      ['◉', '<strong>Stop:</strong> fires when the model finishes responding.'],
+      ['⚙', 'Registered in <strong>settings.json</strong>, scripts in <strong>.claude/hooks/</strong>'],
+    ],
+    diag: `
+<div class="d-wrap" style="flex-direction:column;gap:0;align-items:center;">
+  <div class="hooks-diag">
+    <div class="d-box" style="text-align:center;align-self:center;">tool about to run</div>
+    <div class="d-wire d-wire-v" style="height:14px;align-self:center;"></div>
+    <div class="d-box hi" style="text-align:center;align-self:center;">PreToolUse hook</div>
+    <div class="d-wire d-wire-v" style="height:14px;align-self:center;"></div>
+    <div class="hooks-fork">
+      <div class="fork-path">
+        <span class="fork-label fork-ok">✓ proceed</span>
+        <div style="width:1px;height:14px;background:rgba(0,148,90,0.3);"></div>
+        <div class="d-box" style="font-size:9px;text-align:center;">tool runs</div>
+        <div class="d-wire d-wire-v" style="height:14px;align-self:center;"></div>
+        <div class="d-box hi" style="text-align:center;font-size:8.5px;">PostToolUse hook</div>
+        <div class="d-wire d-wire-v" style="height:12px;align-self:center;"></div>
+        <span class="fork-label fork-ok" style="font-size:8px;">lint / test</span>
+      </div>
+      <div class="fork-path">
+        <span class="fork-label fork-stop">✗ blocked</span>
+        <div style="width:1px;height:14px;background:rgba(212,24,69,0.3);"></div>
+        <div style="border:1px solid rgba(212,24,69,0.4);border-radius:4px;background:rgba(212,24,69,0.08);padding:6px 10px;font-size:9px;font-weight:700;color:#d41845;letter-spacing:0.08em;">STOP</div>
+      </div>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    n: '05', color: '#c07800',
+    title: ['Ralph', ' Loop'],
+    accentIdx: 0,
+    tagline: 'Generate → critique → refine. Repeat until the output is good enough.',
+    points: [
+      ['⟳', 'Meta-skill that runs an iterative refinement loop on any output.'],
+      ['✏', '<strong>First pass:</strong> generate a draft. Critique against a rubric. Revise.'],
+      ['↑', 'Each cycle improves quality; the loop stops when the rubric is satisfied.'],
+      ['◎', 'Named after Ralph Wiggum — it keeps trying until it gets it right.'],
+    ],
+    diag: `
+<div class="d-wrap" style="flex-direction:column;gap:12px;">
+  <div class="ralph-diag">
+    <div class="ralph-passes">
+      <div class="ralph-pass">
+        <div class="ralph-bar-wrap">
+          <div class="ralph-bar rb-1" style="height:25%;opacity:0.6;"></div>
+        </div>
+        <div class="ralph-score">25%</div>
+        <div class="ralph-pass-label">pass 1</div>
+      </div>
+      <div style="font-size:16px;color:var(--sc);opacity:0.5;margin-bottom:36px;">→</div>
+      <div class="ralph-pass">
+        <div class="ralph-bar-wrap">
+          <div class="ralph-bar rb-2" style="height:62%;opacity:0.8;"></div>
+        </div>
+        <div class="ralph-score">62%</div>
+        <div class="ralph-pass-label">pass 2</div>
+      </div>
+      <div style="font-size:16px;color:var(--sc);opacity:0.5;margin-bottom:36px;">→</div>
+      <div class="ralph-pass">
+        <div class="ralph-bar-wrap">
+          <div class="ralph-bar rb-3" style="height:92%;"></div>
+        </div>
+        <div class="ralph-score">92%</div>
+        <div class="ralph-pass-label">pass 3</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="d-box" style="font-size:9px;">rubric threshold met</div>
+      <div class="ralph-check">✓</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:-4px;">
+      <span style="font-size:8px;color:var(--text-lo);letter-spacing:0.1em;text-transform:uppercase;">critique loop</span>
+      <div class="d-wire d-wire-h" style="width:60px;"></div>
+      <span style="font-size:12px;color:var(--sc);opacity:0.6;">⟳</span>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    n: '06', color: '#7828d8',
+    title: ['Skills'],
+    accentIdx: 0,
+    tagline: 'Reusable prompt workflows, loaded into context on demand.',
+    points: [
+      ['/', 'A skill = Markdown file with YAML frontmatter, invoked via <strong>/skill-name</strong>.'],
+      ['☰', '<strong>user-invocable: true</strong> makes it appear in the /skills list.'],
+      ['⟶', 'Skills chain multiple agents, define multi-phase workflows, carry tool permissions.'],
+      ['★', 'Examples: <strong>feature-dev</strong> (7-phase), <strong>review-pr</strong>, <strong>frontend-design</strong>.'],
+    ],
+    diag: `
+<div class="d-wrap">
+  <div class="skill-diag">
+    <div class="skill-file">
+<span style="color:var(--text-lo);">---</span>
+<span class="ky">name</span>: <span class="kv">feature-dev</span>
+<span class="ky">user-invocable</span>: <span class="kv">true</span>
+<span class="ky">tools</span>:
+  - <span class="kv">Read</span>
+  - <span class="kv">Edit</span>
+  - <span class="kv">Bash</span>
+<span class="ky">model</span>: <span class="kv">sonnet</span>
+<span style="color:var(--text-lo);">---</span>
+<span style="color:var(--text-lo);"># 7-phase workflow...</span>
+    </div>
+    <div class="skill-load">
+      <div class="skill-shimmer"></div>
+      <div class="skill-shimmer" style="animation-delay:0.3s;"></div>
+      <div class="skill-shimmer" style="animation-delay:0.6s;"></div>
+      <div class="skill-load-label" style="margin-top:3px;">loaded</div>
+    </div>
+    <div class="skill-ctx">
+      <div style="font-size:9px;font-weight:800;color:var(--sc);margin-bottom:7px;letter-spacing:0.08em;">CONTEXT</div>
+      <div class="skill-ctx-row">
+        <div class="d-pulse" style="width:5px;height:5px;"></div>
+        instructions loaded
+      </div>
+      <div class="skill-ctx-row">
+        <div class="d-pulse" style="width:5px;height:5px;animation-delay:0.4s;"></div>
+        tools granted
+      </div>
+      <div class="skill-ctx-row">
+        <div class="d-pulse" style="width:5px;height:5px;animation-delay:0.8s;"></div>
+        phases defined
+      </div>
+      <div class="skill-ctx-row" style="margin-top:5px;color:var(--sc);font-weight:800;">
+        ▶ agent ready
+      </div>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    n: '07', color: '#0078a8',
+    title: ['Context'],
+    accentIdx: 0,
+    tagline: 'Everything the model can see right now — its working memory.',
+    points: [
+      ['◫', 'Context = token window: system prompt + messages + tool results.'],
+      ['☰', '<strong>System prompt:</strong> role, instructions, CLAUDE.md project rules.'],
+      ['⟳', '<strong>Conversation history:</strong> all prior turns, tool calls, and results.'],
+      ['⚠', 'Context is finite (200k tokens). Old messages auto-compress.'],
+    ],
+    diag: `
+<div class="d-wrap">
+  <div class="ctx-diag">
+    <div class="ctx-stack">
+      <div class="ctx-layer" style="padding:4px 9px;">
+        <span style="font-size:8px;">CLAUDE.md rules</span>
+        <span class="ctx-layer-size">~2k</span>
+      </div>
+      <div class="ctx-layer" style="padding:5px 9px;">
+        <span style="font-size:8.5px;">system prompt</span>
+        <span class="ctx-layer-size">~8k</span>
+      </div>
+      <div class="ctx-layer" style="padding:7px 9px;">
+        <span style="font-size:9px;">conversation history</span>
+        <span class="ctx-layer-size">~60k</span>
+      </div>
+      <div class="ctx-layer" style="padding:6px 9px;">
+        <span style="font-size:8.5px;">tool results</span>
+        <span class="ctx-layer-size">~24k</span>
+      </div>
+      <div class="ctx-layer active" style="padding:7px 9px;">
+        <span style="font-size:9px;">▶ current task</span>
+        <span class="ctx-layer-size">~1k</span>
+      </div>
+    </div>
+    <div class="ctx-budget">
+      <div class="ctx-budget-label">200k budget</div>
+      <div class="ctx-budget-bar">
+        <div class="ctx-fill"></div>
+      </div>
+      <div class="d-label" style="white-space:nowrap;">~95k used</div>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    n: '08', color: '#b85000',
+    title: ['Sub', ' Agent'],
+    accentIdx: 0,
+    tagline: 'Delegate complex tasks to specialists running in parallel sub-processes.',
+    points: [
+      ['⊕', 'Main agent spawns sub-agents using the <strong>Task</strong> tool with a <strong>subagent_type</strong>.'],
+      ['◈', 'Sub-agents run in isolation — they don\'t share the parent\'s context.'],
+      ['∥', 'Multiple sub-agents run <strong>in parallel</strong> — ideal for independent research.'],
+      ['↩', 'Sub-agent\'s result returns as a single message to the parent.'],
+    ],
+    diag: `
+<div class="d-wrap" style="flex-direction:column;gap:8px;">
+  <div class="sub-diag">
+    <div class="d-box hi" style="text-align:center;min-width:120px;">main agent</div>
+    <div style="display:flex;gap:40px;align-items:flex-start;">
+      <div style="width:1px;height:20px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+      <div style="width:1px;height:20px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+      <div style="width:1px;height:20px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+    </div>
+    <div class="sub-agents">
+      <div class="sub-agent">
+        <div class="sub-box">code-<br>explorer</div>
+      </div>
+      <div class="sub-agent">
+        <div class="sub-box">schema-<br>designer</div>
+      </div>
+      <div class="sub-agent">
+        <div class="sub-box">security<br>scanner</div>
+      </div>
+    </div>
+    <div class="parallel-bracket">∥ parallel execution</div>
+    <div style="display:flex;gap:40px;align-items:flex-start;">
+      <div style="width:1px;height:16px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+      <div style="width:1px;height:16px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+      <div style="width:1px;height:16px;background:color-mix(in srgb,var(--sc) 30%,var(--border));"></div>
+    </div>
+    <div class="d-box" style="text-align:center;min-width:120px;font-size:9px;">
+      collected results ↩
+    </div>
+  </div>
+</div>`
+  },
+  {
+    n: '09', color: '#5870a0',
+    title: ['MCP'],
+    accentIdx: 0,
+    tagline: 'A standard protocol connecting Claude to external tools, APIs, and data sources.',
+    points: [
+      ['◈', '<strong>MCP</strong> = Model Context Protocol — open standard for tool/resource connections.'],
+      ['⟷', 'An MCP server exposes tools and resources to Claude over a local protocol.'],
+      ['⚙', 'Registered in <strong>.mcp.json</strong>; multiple servers run simultaneously.'],
+      ['★', 'This repo: context7, postgres, github, playwright, atlassian.'],
+    ],
+    diag: `
+<div class="d-wrap" style="flex-direction:column;gap:10px;">
+  <div class="mcp-diag">
+    <div class="mcp-center">
+      <div class="d-box hi" style="text-align:center;padding:10px 14px;">
+        <div style="font-size:9px;opacity:0.7;margin-bottom:2px;">model</div>
+        <div style="font-size:13px;font-weight:800;">Claude</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div class="d-wire d-wire-h" style="width:28px;"></div>
+        <div class="d-label">JSON-RPC</div>
+        <div class="d-wire d-wire-h" style="width:28px;"></div>
+      </div>
+      <div class="mcp-protocol">MCP<br>Protocol</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+      <div class="d-wire d-wire-v" style="height:14px;align-self:center;"></div>
+      <div class="d-label">servers</div>
+    </div>
+    <div class="mcp-servers">
+      <div class="mcp-server"><div class="mcp-dot"></div>context7</div>
+      <div class="mcp-server"><div class="mcp-dot"></div>postgres</div>
+      <div class="mcp-server"><div class="mcp-dot"></div>github</div>
+      <div class="mcp-server"><div class="mcp-dot"></div>playwright</div>
+      <div class="mcp-server"><div class="mcp-dot"></div>atlassian</div>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    n: '10', color: '#00804a',
+    title: ['Semantic', ' Search'],
+    accentIdx: 0,
+    tagline: 'Find code by meaning, not keywords — powered by embedding vectors.',
+    points: [
+      ['◉', 'Text is converted to a high-dimensional vector encoding semantic meaning.'],
+      ['≈', 'Similar meanings → similar vectors, regardless of exact words used.'],
+      ['⊕', 'Query embedding vs stored code embeddings — ranked by cosine similarity.'],
+      ['⚡', 'Powers "find auth files" even when the word "auth" doesn\'t appear.'],
+    ],
+    diag: `
+<div class="d-wrap" style="flex-direction:column;gap:8px;">
+  <div class="sem-diag">
+    <div style="display:flex;align-items:center;gap:10px;width:100%;justify-content:center;">
+      <div class="d-box" style="font-size:9px;">query text</div>
+      <div class="d-wire d-wire-h" style="width:20px;"></div>
+      <div class="d-box hi" style="font-size:9px;">embed model</div>
+      <div class="d-wire d-wire-h" style="width:20px;"></div>
+      <div class="vec-bars">
+        ${['#5520e8','#0088bb','#00945a','#c07800','#d41845','#7828d8','#0078a8','#b85000','#5870a0','#00804a','#1068cc','#5520e8']
+          .map((c,i) => `<div class="vec-bar" style="height:${14+Math.round(Math.sin(i)*10)}px;background:${c}99;"></div>`).join('')}
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;justify-content:center;">
+      <div class="d-wire d-wire-v" style="height:14px;"></div>
+      <div class="d-box hi" style="font-size:9px;">vector DB</div>
+      <div class="d-wire d-wire-v" style="height:14px;"></div>
+    </div>
+    <div class="d-label" style="text-align:center;">k-nearest neighbors → ranked results</div>
+    <div class="sem-results">
+      <div class="sem-result">
+        <div style="width:70px;height:3px;border-radius:2px;background:color-mix(in srgb,var(--sc) 90%,transparent);"></div>
+        auth/session.py
+        <span class="sem-score">0.94</span>
+      </div>
+      <div class="sem-result">
+        <div style="width:60px;height:3px;border-radius:2px;background:color-mix(in srgb,var(--sc) 70%,transparent);"></div>
+        middleware/jwt.py
+        <span class="sem-score">0.87</span>
+      </div>
+      <div class="sem-result">
+        <div style="width:48px;height:3px;border-radius:2px;background:color-mix(in srgb,var(--sc) 50%,transparent);"></div>
+        models/user.py
+        <span class="sem-score">0.81</span>
+      </div>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    n: '11', color: '#1068cc',
+    title: ['LSP'],
+    accentIdx: 0,
+    tagline: 'A language-agnostic protocol giving editors deep code intelligence.',
+    points: [
+      ['◉', 'LSP separates language smarts from editors — one server, many editors.'],
+      ['⚡', 'Server provides: completions, diagnostics, go-to-definition, hover docs.'],
+      ['◈', 'Claude Code uses LSP to get IDE-level code intelligence — it sees your errors.'],
+      ['⊕', 'The agent knows about type errors without running the code.'],
+    ],
+    diag: `
+<div class="d-wrap" style="flex-direction:column;gap:10px;">
+  <div class="lsp-diag">
+    <div class="lsp-flow">
+      <div class="d-box" style="font-size:9px;text-align:center;">editor</div>
+      <div class="d-wire d-wire-h" style="width:16px;"></div>
+      <div class="d-box" style="font-size:8.5px;text-align:center;">LSP<br>client</div>
+      <div class="lsp-rpc">
+        <div class="d-wire d-wire-h" style="width:24px;"></div>
+        <div class="lsp-rpc-label">JSON-RPC</div>
+        <div class="d-wire d-wire-h" style="width:24px;"></div>
+      </div>
+      <div class="d-box hi" style="font-size:9px;text-align:center;padding:8px 10px;">
+        language<br>server
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;padding-right:8px;">
+      <div class="d-wire d-wire-v" style="height:14px;"></div>
+    </div>
+    <div class="lsp-responses">
+      <div class="lsp-resp">
+        <div class="r-dot"></div>
+        completions [12]
+      </div>
+      <div class="lsp-resp">
+        <div class="r-dot r-err"></div>
+        <span style="color:#d41845;">diagnostics [2]</span>
+      </div>
+      <div class="lsp-resp">
+        <div class="r-dot"></div>
+        hover: string
+      </div>
+      <div class="lsp-resp">
+        <div class="r-dot"></div>
+        references [5]
+      </div>
+    </div>
+  </div>
+</div>`
+  },
+];
+
+// ══════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════
+
+const wrap     = document.getElementById('slide-wrap');
+const dotsEl   = document.getElementById('dots');
+const prevBtn  = document.getElementById('btn-prev');
+const nextBtn  = document.getElementById('btn-next');
+const curNumEl = document.getElementById('cur-num');
+
+// Build slides
+SLIDES.forEach((s, i) => {
+  const titleParts = s.title;
+  let titleHTML = titleParts.map((part, pi) =>
+    pi === s.accentIdx
+      ? `<span class="accent">${part.trim()}</span>`
+      : part
+  ).join(' ');
+
+  const pointsHTML = s.points.map(([icon, text]) => `
+    <li>
+      <span class="pt-icon">${icon}</span>
+      <span class="pt-text">${text}</span>
+    </li>
+  `).join('');
+
+  const slide = document.createElement('div');
+  slide.className = 'slide';
+  slide.id = `slide-${i}`;
+  slide.style.setProperty('--sc', s.color);
+  slide.innerHTML = `
+    <div class="slide-left">
+      <div class="slide-num">${s.n} — ${s.title.join('').trim()}</div>
+      <div class="slide-title">${titleHTML}</div>
+      <div class="slide-tagline">${s.tagline}</div>
+      <ul class="slide-points">${pointsHTML}</ul>
+    </div>
+    <div class="slide-right">${s.diag}</div>
+  `;
+  wrap.appendChild(slide);
+});
+
+// Build dots
+SLIDES.forEach((s, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  dot.style.setProperty('--sc', s.color);
+  dot.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(dot);
+});
+
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+
+let current = 0;
+
+function goTo(idx) {
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+
+  // Exit current
+  if (current !== idx) {
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit-left');
+    setTimeout(() => slides[current].classList.remove('exit-left'), 300);
+  }
+
+  current = idx;
+
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === idx);
+  });
+
+  dots.forEach((d, i) => {
+    d.classList.toggle('active', i === idx);
+  });
+
+  curNumEl.textContent = SLIDES[idx].n;
+
+  prevBtn.disabled = idx === 0;
+  nextBtn.disabled = idx === SLIDES.length - 1;
+}
+
+prevBtn.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+nextBtn.addEventListener('click', () => { if (current < SLIDES.length - 1) goTo(current + 1); });
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight' && current < SLIDES.length - 1) goTo(current + 1);
+  if (e.key === 'ArrowLeft'  && current > 0)                 goTo(current - 1);
+  if (e.key === 'Escape')                                    goTo(0);
+});
+
+// Init
+goTo(0);
+</script>
+</body>
+</html>

@@ -437,6 +437,53 @@ CREATE INDEX idx_events_metadata_user ON events
 USING GIN ((metadata -> 'user_id'));
 ```
 
+### Case-insensitive text lookups
+
+Two approaches — prefer ICU collations for new schemas (PG 12+):
+
+**ICU collation (recommended, PG 12+)**
+```sql
+-- Create once per database; 'und-u-ks-level2' = case+accent insensitive
+CREATE COLLATION ci (
+    provider      = icu,
+    locale        = 'und-u-ks-level2',
+    deterministic = false
+);
+
+CREATE TABLE products (
+    sku  TEXT COLLATE ci NOT NULL,  -- B-tree index works natively
+    name TEXT COLLATE ci NOT NULL
+);
+
+CREATE INDEX idx_products_sku  ON products(sku);   -- standard B-tree, no tricks
+CREATE INDEX idx_products_name ON products(name);
+
+-- These all match the same row:
+SELECT * FROM products WHERE sku = 'ABC-001';
+SELECT * FROM products WHERE sku = 'abc-001';
+SELECT * FROM products WHERE sku = 'Abc-001';
+```
+
+Advantages over CITEXT: correct Unicode handling, composable with other operators,
+tune case and accent sensitivity independently via locale string.
+
+**CITEXT extension (legacy / simpler setups)**
+```sql
+CREATE EXTENSION IF NOT EXISTS citext;
+
+CREATE TABLE users (
+    username CITEXT NOT NULL UNIQUE,  -- B-tree index, case-insensitive equality
+    email    CITEXT NOT NULL UNIQUE
+);
+
+-- Transparently case-insensitive:
+SELECT * FROM users WHERE username = 'Alice';  -- matches 'alice', 'ALICE', etc.
+```
+
+Use CITEXT when: targeting older PostgreSQL, the schema is simple, or you want
+drop-in TEXT replacement without managing collations. Avoid for multilingual data
+or where Unicode edge cases (Turkish dotless-i, etc.) matter.
+
 ## Migration patterns
 
 **Additive changes (safe):**

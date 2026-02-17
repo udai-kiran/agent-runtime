@@ -1,5 +1,5 @@
 ---
-name: type-design-analyzer
+name: code-quality-type-design-analyzer
 description: "Analyze type design for encapsulation and invariant expression. Useful when introducing new types, reviewing a PR with new types, or refactoring existing types."
 model: inherit
 color: pink
